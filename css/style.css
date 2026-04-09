@@ -1,0 +1,862 @@
+/* ============================================
+   WEEKENDWEG — Wavre 2026
+   Inspired by The Hoxton & HotVox
+   ============================================ */
+
+/* --- Reset & Base --- */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --color-dark: #111111;
+    --color-charcoal: #1a1a1a;
+    --color-warm-dark: #1e1c1a;
+    --color-cream: #f5f0eb;
+    --color-light: #faf8f5;
+    --color-gold: #c9a96e;
+    --color-gold-light: #dfc18a;
+    --color-text-dark: #1a1a1a;
+    --color-text-light: #f5f0eb;
+    --color-text-muted: #8a8580;
+    --color-border: rgba(201, 169, 110, 0.2);
+
+    --font-serif: 'Playfair Display', Georgia, serif;
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+    --nav-height: 72px;
+    --section-padding: clamp(80px, 10vw, 140px);
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+}
+
+body {
+    font-family: var(--font-sans);
+    background-color: var(--color-dark);
+    color: var(--color-text-light);
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+ul {
+    list-style: none;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* --- Navigation --- */
+.nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--nav-height);
+    z-index: 1000;
+    transition: background 0.4s ease, box-shadow 0.4s ease;
+}
+
+.nav.scrolled {
+    background: rgba(17, 17, 17, 0.95);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 1px 0 var(--color-border);
+}
+
+.nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-logo {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--color-gold);
+}
+
+.nav-links {
+    display: flex;
+    gap: 36px;
+}
+
+.nav-links a {
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    transition: color 0.3s ease;
+    position: relative;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--color-gold);
+    transition: width 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: var(--color-cream);
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+.nav-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+}
+
+.nav-toggle span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--color-cream);
+    transition: all 0.3s ease;
+}
+
+/* --- Hero Section --- */
+.hero {
+    position: relative;
+    height: 100vh;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: 
+        linear-gradient(135deg, rgba(17,17,17,0.7) 0%, rgba(30,28,26,0.5) 100%),
+        url('https://primary.jwwb.nl/public/o/t/j/temp-pekxcxqpizwenbpiktod/0a2d194c-fad7-4a55-bc30-d25119ec975c-high.jpg?enable-io=true&width=1920') center/cover no-repeat;
+    overflow: hidden;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, 
+        rgba(17,17,17,0.3) 0%, 
+        rgba(17,17,17,0.1) 40%, 
+        rgba(17,17,17,0.6) 100%
+    );
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 0 24px;
+}
+
+.hero-subtitle {
+    font-family: var(--font-sans);
+    font-size: clamp(12px, 1.5vw, 14px);
+    font-weight: 400;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--color-gold);
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease 0.2s forwards;
+}
+
+.hero-title {
+    font-family: var(--font-serif);
+    font-size: clamp(60px, 12vw, 160px);
+    font-weight: 700;
+    line-height: 0.95;
+    color: var(--color-cream);
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease 0.4s forwards;
+}
+
+.hero-title span {
+    color: var(--color-gold);
+    font-style: italic;
+    font-weight: 400;
+}
+
+.hero-detail {
+    font-size: clamp(14px, 1.8vw, 18px);
+    font-weight: 300;
+    color: var(--color-text-muted);
+    letter-spacing: 2px;
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease 0.6s forwards;
+}
+
+.hero-cta {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--color-dark);
+    background: var(--color-gold);
+    padding: 16px 40px;
+    border-radius: 0;
+    transition: all 0.3s ease;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease 0.8s forwards;
+}
+
+.hero-cta:hover {
+    background: var(--color-gold-light);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(201, 169, 110, 0.3);
+}
+
+.hero-scroll {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+}
+
+.scroll-line {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, var(--color-gold), transparent);
+    animation: scrollPulse 2s ease infinite;
+}
+
+/* --- Sections --- */
+.section {
+    padding: var(--section-padding) 0;
+}
+
+.section-dark {
+    background: var(--color-charcoal);
+    color: var(--color-text-light);
+}
+
+.section-light {
+    background: var(--color-cream);
+    color: var(--color-text-dark);
+}
+
+.section-label {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--color-gold);
+    margin-bottom: 16px;
+}
+
+.section-title {
+    font-family: var(--font-serif);
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 700;
+    margin-bottom: 60px;
+    line-height: 1.1;
+}
+
+.section-light .section-title {
+    color: var(--color-text-dark);
+}
+
+.section-intro {
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.8;
+    max-width: 700px;
+    margin-bottom: 60px;
+}
+
+.section-light .section-intro {
+    color: #555;
+}
+
+/* --- Agenda / Timeline --- */
+.day-block {
+    margin-bottom: 64px;
+}
+
+.day-block:last-child {
+    margin-bottom: 0;
+}
+
+.day-title {
+    font-family: var(--font-serif);
+    font-size: clamp(20px, 3vw, 28px);
+    font-weight: 400;
+    font-style: italic;
+    color: var(--color-gold);
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.timeline {
+    position: relative;
+    padding-left: 0;
+}
+
+.timeline-item {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 32px;
+    padding: 24px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    transition: all 0.3s ease;
+}
+
+.timeline-item:hover {
+    padding-left: 12px;
+    border-bottom-color: var(--color-border);
+}
+
+.timeline-item.highlight {
+    background: linear-gradient(90deg, rgba(201, 169, 110, 0.08), transparent);
+    padding: 24px;
+    margin: 0 -24px;
+    border-radius: 4px;
+    border-bottom: none;
+}
+
+.timeline-time {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--color-gold);
+    padding-top: 2px;
+}
+
+.timeline-content h4 {
+    font-family: var(--font-sans);
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 4px;
+    color: var(--color-cream);
+}
+
+.timeline-content p {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--color-text-muted);
+}
+
+/* --- Villa / Locatie --- */
+
+/* Photo Gallery */
+.villa-gallery {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 24px;
+    margin-bottom: 48px;
+}
+
+.villa-gallery-main {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    aspect-ratio: 4/3;
+}
+
+.villa-gallery-main img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s ease;
+}
+
+.villa-gallery-main:hover img {
+    transform: scale(1.04);
+}
+
+.villa-gallery-badge {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--color-cream);
+    background: rgba(17, 17, 17, 0.7);
+    backdrop-filter: blur(10px);
+    padding: 10px 20px;
+    border-radius: 4px;
+}
+
+.villa-gallery-side {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.villa-gallery-img {
+    flex: 1;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.villa-gallery-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s ease;
+}
+
+.villa-gallery-img:hover img {
+    transform: scale(1.04);
+}
+
+.villa-gallery-quote {
+    background: white;
+    border-radius: 12px;
+    padding: 28px;
+    border-left: 3px solid var(--color-gold);
+}
+
+.villa-gallery-quote blockquote {
+    font-family: var(--font-serif);
+    font-size: 15px;
+    font-style: italic;
+    line-height: 1.7;
+    color: #444;
+    margin-bottom: 12px;
+}
+
+.villa-gallery-quote cite {
+    font-size: 13px;
+    font-style: normal;
+    color: var(--color-text-muted);
+}
+
+.villa-gallery-quote cite span {
+    color: var(--color-gold);
+    font-weight: 600;
+}
+
+/* Info Cards */
+.villa-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 48px;
+}
+
+.villa-info-card {
+    background: white;
+    padding: 32px;
+    border-radius: 12px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.villa-info-card h3 {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    margin-bottom: 16px;
+    color: var(--color-text-dark);
+}
+
+.villa-info-card ul {
+    list-style: none;
+}
+
+.villa-info-card li {
+    padding: 6px 0;
+    font-size: 15px;
+    color: #555;
+    border-bottom: 1px solid #eee;
+    padding-left: 16px;
+    position: relative;
+}
+
+.villa-info-card li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--color-gold);
+}
+
+.villa-info-card-accent {
+    background: var(--color-charcoal);
+}
+
+.villa-info-card-accent h3 {
+    color: var(--color-cream);
+}
+
+.villa-address {
+    font-size: 18px;
+    line-height: 1.8;
+    color: var(--color-text-muted);
+    margin-bottom: 24px;
+}
+
+.villa-cta {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 48px;
+    flex-wrap: wrap;
+}
+
+.btn-primary {
+    display: inline-block;
+    padding: 14px 32px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--color-dark);
+    background: var(--color-gold);
+    border: 2px solid var(--color-gold);
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: var(--color-gold-light);
+    transform: translateY(-2px);
+}
+
+.btn-outline {
+    display: inline-block;
+    padding: 14px 32px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    border: 2px solid var(--color-gold);
+    color: var(--color-gold);
+    transition: all 0.3s ease;
+}
+
+.section-light .btn-outline {
+    color: var(--color-text-dark);
+    border-color: var(--color-text-dark);
+}
+
+.section-light .btn-outline:hover {
+    background: var(--color-text-dark);
+    color: var(--color-cream);
+}
+
+.btn-outline:hover {
+    background: var(--color-gold);
+    color: var(--color-dark);
+}
+
+.villa-info-card-accent .btn-outline {
+    color: var(--color-gold);
+    border-color: var(--color-gold);
+}
+
+.villa-info-card-accent .btn-outline:hover {
+    background: var(--color-gold);
+    color: var(--color-dark);
+}
+
+.map-container {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Voorbereiding --- */
+.prep-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+}
+
+.prep-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 40px;
+    transition: all 0.3s ease;
+}
+
+.prep-card:hover {
+    border-color: var(--color-border);
+    transform: translateY(-4px);
+}
+
+.prep-card-highlight {
+    background: linear-gradient(135deg, rgba(201, 169, 110, 0.1), rgba(201, 169, 110, 0.02));
+    border-color: var(--color-border);
+}
+
+.prep-icon {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.prep-card h3 {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    margin-bottom: 12px;
+    color: var(--color-cream);
+}
+
+.prep-card p {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--color-text-muted);
+    line-height: 1.7;
+    margin-bottom: 16px;
+}
+
+.prep-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--color-gold);
+    background: rgba(201, 169, 110, 0.12);
+    padding: 6px 14px;
+    border-radius: 4px;
+}
+
+/* --- FAQ --- */
+.faq-list {
+    max-width: 800px;
+}
+
+.faq-item {
+    border-bottom: 1px solid #ddd;
+}
+
+.faq-question {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 0;
+    font-family: var(--font-sans);
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--color-text-dark);
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: color 0.3s ease;
+}
+
+.faq-question:hover {
+    color: var(--color-gold);
+}
+
+.faq-icon {
+    font-size: 24px;
+    font-weight: 300;
+    color: var(--color-gold);
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+    margin-left: 16px;
+}
+
+.faq-item.active .faq-icon {
+    transform: rotate(45deg);
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.4s ease;
+}
+
+.faq-item.active .faq-answer {
+    max-height: 200px;
+}
+
+.faq-answer p {
+    padding-bottom: 24px;
+    font-size: 15px;
+    font-weight: 300;
+    color: #666;
+    line-height: 1.7;
+}
+
+/* --- Footer --- */
+.footer {
+    background: var(--color-dark);
+    padding: 48px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.footer-inner {
+    text-align: center;
+}
+
+.footer-logo {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    color: var(--color-gold);
+    margin-bottom: 8px;
+}
+
+.footer-text {
+    font-size: 13px;
+    color: var(--color-text-muted);
+}
+
+/* --- Animations --- */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scrollPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+/* Scroll reveal */
+.reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+    .nav-links {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 280px;
+        height: 100vh;
+        background: var(--color-charcoal);
+        flex-direction: column;
+        padding: 100px 40px 40px;
+        gap: 24px;
+        transition: right 0.4s ease;
+    }
+
+    .nav-links.open {
+        right: 0;
+    }
+
+    .nav-toggle {
+        display: flex;
+        z-index: 1001;
+    }
+
+    .nav-toggle.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .nav-toggle.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .nav-toggle.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    .timeline-item {
+        grid-template-columns: 80px 1fr;
+        gap: 16px;
+    }
+
+    .villa-gallery {
+        grid-template-columns: 1fr;
+    }
+
+    .villa-gallery-main {
+        aspect-ratio: 16/9;
+    }
+
+    .villa-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .villa-card-large {
+        grid-row: auto;
+        max-height: 300px;
+    }
+
+    .villa-cta {
+        flex-direction: column;
+    }
+
+    .villa-cta .btn-primary,
+    .villa-cta .btn-outline {
+        text-align: center;
+    }
+
+    .prep-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 50px;
+    }
+
+    .timeline-item {
+        grid-template-columns: 1fr;
+        gap: 4px;
+    }
+
+    .timeline-time {
+        font-size: 12px;
+    }
+
+    .section-title {
+        font-size: 32px;
+    }
+}
