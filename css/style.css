@@ -1102,6 +1102,28 @@ ul {
     color: var(--color-cream);
 }
 
+.chat-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.chat-reset {
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0 4px;
+    line-height: 1;
+    transition: color 0.2s ease, transform 0.3s ease;
+}
+
+.chat-reset:hover {
+    color: var(--color-cream);
+    transform: rotate(180deg);
+}
+
 .chat-messages {
     flex: 1;
     overflow-y: auto;

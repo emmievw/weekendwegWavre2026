@@ -405,15 +405,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatWidget = document.getElementById('chatWidget');
     const chatFab = document.getElementById('chatFab');
     const chatClose = document.getElementById('chatClose');
+    const chatReset = document.getElementById('chatReset');
     const chatForm = document.getElementById('chatForm');
     const chatInput = document.getElementById('chatInput');
     const chatMessages = document.getElementById('chatMessages');
+
+    function resetChat() {
+        chatMessages.innerHTML = '<div class="chat-message chat-bot"><p>Hoi! Stel me een vraag over het weekendweg-weekend in Wavre. 🏡</p></div>';
+        missedCount = 0;
+        chatInput.focus();
+    }
 
     chatFab.addEventListener('click', () => {
         chatWidget.classList.add('open');
         chatFab.classList.add('hidden');
         chatInput.focus();
     });
+
+    chatReset.addEventListener('click', resetChat);
 
     chatClose.addEventListener('click', () => {
         chatWidget.classList.remove('open');
