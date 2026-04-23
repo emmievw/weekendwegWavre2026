@@ -22,6 +22,7 @@
             </button>
             <ul class="nav-links" id="navLinks">
                 <li><a href="#agenda">Agenda</a></li>
+                <li><a href="#weer">Weer</a></li>
                 <li><a href="#locatie">Locatie</a></li>
                 <li><a href="#voorbereiding">Voorbereiding</a></li>
                 <li><a href="#faq">FAQ</a></li>
@@ -167,6 +168,23 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- Weer Section -->
+    <section class="section section-dark" id="weer">
+        <div class="container">
+            <p class="section-label">Live weerbericht</p>
+            <h2 class="section-title">Weer in Wavre</h2>
+            <p class="section-intro">Automatisch bijgewerkt bij elk bezoek. De forecast voor ons weekend — van vrijdag 30 april tot zondag 3 mei.</p>
+
+            <div class="weather-grid" id="weatherGrid">
+                <div class="weather-loading">
+                    <div class="weather-spinner"></div>
+                    <p>Weerbericht ophalen...</p>
+                </div>
+            </div>
+            <p class="weather-source">Bron: <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a> &middot; <span id="weatherUpdate"></span></p>
         </div>
     </section>
 
