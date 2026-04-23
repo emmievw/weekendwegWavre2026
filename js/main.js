@@ -187,15 +187,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Chat Widget (keyword-based, geen API key nodig) ---
     const QA_DATA = [
         {
-            keywords: ['adres', 'waar', 'locatie', 'villa', 'templiers', 'wavre', 'verblijf'],
+            keywords: ['adres', 'waar', 'locatie', 'villa', 'templiers', 'wavre', 'verblijf', 'heen', 'naartoe', 'plek', 'huisje', 'huis'],
             answer: 'We verblijven in Villa des Templiers, Rue des Templiers 87, 1301 Wavre, België. Ongeveer 20 minuten rijden van Brussel. 🏡'
         },
         {
-            keywords: ['vertrek', 'hoe laat', 'wanneer weg', 'kerkwegje', 'vrijdag vertrek'],
+            keywords: ['vertrek', 'hoe laat', 'wanneer weg', 'kerkwegje', 'vrijdag vertrek', 'gaan we', 'tijd', 'tijdstip', 'wanneer vertrekken', 'uur', 'hoe laat gaan', 'hoe laat beginnen'],
             answer: 'We vertrekken vrijdag 30 april om 10:15 vanaf het Kerkwegje. Zorg dat je op tijd klaarstaat! 🚗'
         },
         {
-            keywords: ['agenda', 'programma', 'planning', 'schema', 'wat doen'],
+            keywords: ['agenda', 'programma', 'planning', 'schema', 'wat doen', 'wat gaan we', 'plan', 'overzicht', 'wat staat er'],
             answer: '📋 <strong>Vrijdag:</strong> vertrek 10:15, lunch onderweg, boodschappen in Wavre, diner in Brussel, borrelen & stappen.<br><strong>Zaterdag:</strong> vrij programma overdag, BBQ 17:30, quiz 19:30, muzikale verrassing & cocktails 21:00.<br><strong>Zondag:</strong> ontbijt en terug naar huis.'
         },
         {
@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
             answer: '🗓️ <strong>Zaterdag 1 mei:</strong><br>Overdag — Vrij programma, relaxen<br>17:30 BBQ (tot 19:30)<br>19:30 Quiz (tot 21:00)<br>21:00 Muzikale verrassing & cocktails 🎵 (tot 23:00)'
         },
         {
-            keywords: ['zondag', 'dag 3', 'laatste dag', 'terug', 'naar huis'],
+            keywords: ['zondag', 'dag 3', 'laatste dag', 'terug', 'naar huis', 'terugreis', 'hoe laat terug'],
             answer: '🗓️ <strong>Zondag 2 mei:</strong><br>Ochtend — Ontbijt, rustig wakker worden<br>Daarna — Richting huis! Tot de volgende keer 👋'
         },
         {
@@ -235,11 +235,11 @@ document.addEventListener('DOMContentLoaded', () => {
             answer: 'Na het diner gaan we borrelen in de Deliriumstraat in Brussel. Proost! 🍻'
         },
         {
-            keywords: ['dresscode', 'kleding', 'ibiza', 'chique', 'aantrekken', 'outfit'],
+            keywords: ['dresscode', 'kleding', 'ibiza', 'chique', 'aantrekken', 'outfit', 'dress code', 'aan trekken', 'wat trek ik aan', 'wat moet ik aan'],
             answer: 'De dresscode voor zaterdagavond is <strong>Ibiza Chique</strong> — stijlvol maar relaxed, alsof je naar een beach club gaat. Linnen, lichte kleuren, zomerse vibes! 🌴'
         },
         {
-            keywords: ['meenemen', 'inpakken', 'wat neem', 'paklijst'],
+            keywords: ['meenemen', 'inpakken', 'wat neem', 'paklijst', 'mee nemen', 'meebrengen', 'mee brengen', 'wat moet ik mee', 'koffer'],
             answer: '🎒 <strong>Meenemen:</strong><br>• Persoonlijke spullen & zwemkleding<br>• Ibiza Chique outfit voor zaterdagavond<br><br><strong>Specifiek:</strong><br>• Emma: frisbee, versiering, zwembadaccessoires<br>• Julia: volleybal en beerpong<br>• Jerusha: Hitster'
         },
         {
@@ -271,11 +271,11 @@ document.addEventListener('DOMContentLoaded', () => {
             answer: 'De villa scoort een 4,85 uit 5 op Airbnb. Top beoordeeld! ⭐'
         },
         {
-            keywords: ['wanneer', 'datum', 'data', 'welke dag', 'weekend'],
+            keywords: ['wanneer', 'datum', 'data', 'welke dag', 'weekend', 'welke datum', 'welk weekend', 'welke dagen', 'hoe lang'],
             answer: 'Het weekend is van vrijdag 30 april tot en met zondag 3 mei 2026. 📅'
         },
         {
-            keywords: ['hoi', 'hallo', 'hey', 'hi', 'yo'],
+            keywords: ['hoi', 'hallo', 'hey', 'hi', 'yo', 'dag', 'goede'],
             answer: 'Hey! 👋 Stel me een vraag over het weekend in Wavre — agenda, locatie, dresscode, noem maar op!'
         },
         {
@@ -350,10 +350,19 @@ document.addEventListener('DOMContentLoaded', () => {
     let missedCount = 0;
 
     function findAnswer(question) {
-        const q = question.toLowerCase()
+        let q = question.toLowerCase()
             .replace(/[?!.,;:'"]/g, '')
             .replace(/\s+/g, ' ')
             .trim();
+
+        // Normaliseer veelvoorkomende samenvoegingen
+        q = q
+            .replace(/hoelaat/g, 'hoe laat')
+            .replace(/hoeveel/g, 'hoe veel')
+            .replace(/waarheen/g, 'waar heen')
+            .replace(/waarom/g, 'waar om')
+            .replace(/waarin/g, 'waar in')
+            .replace(/hoezo/g, 'hoe zo');
 
         let bestMatch = null;
         let bestScore = 0;
@@ -361,8 +370,17 @@ document.addEventListener('DOMContentLoaded', () => {
         for (const item of QA_DATA) {
             let score = 0;
             for (const kw of item.keywords) {
+                // Exacte substring match (zwaarst)
                 if (q.includes(kw.toLowerCase())) {
-                    score += kw.length; // langere matches wegen zwaarder
+                    score += kw.length * 2;
+                }
+                // Als keyword meerdere woorden is, check of alle woorden voorkomen
+                else if (kw.includes(' ')) {
+                    const parts = kw.toLowerCase().split(' ');
+                    const allPresent = parts.every(p => q.includes(p));
+                    if (allPresent) {
+                        score += kw.length;
+                    }
                 }
             }
             if (score > bestScore) {
