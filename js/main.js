@@ -340,7 +340,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     ];
 
-    const FALLBACK = 'Dit is een vraag voor Rutger. Je kan hem hierover bellen. 📞';
+    const FALLBACK_CLARIFY = [
+        'Hmm, dat snap ik niet helemaal. Kun je het anders formuleren? 🤔 Ik weet dingen over de agenda, locatie, dresscode, wat je mee moet nemen, en meer.',
+        'Daar kan ik je niet direct mee helpen. Probeer een ander woord? 💡 Bijvoorbeeld: "agenda", "villa", "dresscode" of "meenemen".',
+        'Ik begrijp je vraag niet helemaal. Typ "help" om te zien waar ik je mee kan helpen! 😊',
+    ];
+    const FALLBACK_RUTGER = 'Dit is een vraag voor Rutger. Je kan hem hierover bellen. 📞';
+
+    let missedCount = 0;
 
     function findAnswer(question) {
         const q = question.toLowerCase()
@@ -364,7 +371,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        return bestScore > 0 ? bestMatch.answer : FALLBACK;
+        if (bestScore > 0) {
+            missedCount = 0;
+            return bestMatch.answer;
+        }
+
+        missedCount++;
+        if (missedCount >= 2) {
+            missedCount = 0;
+            return FALLBACK_RUTGER;
+        }
+        return FALLBACK_CLARIFY[Math.floor(Math.random() * FALLBACK_CLARIFY.length)];
     }
 
     const chatWidget = document.getElementById('chatWidget');
