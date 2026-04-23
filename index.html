@@ -15,11 +15,7 @@
     <nav class="nav" id="nav">
         <div class="nav-inner">
             <a href="#hero" class="nav-logo">WEEKENDWEG</a>
-            <button class="nav-toggle" id="navToggle" aria-label="Menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+            <button class="nav-toggle" id="navToggle" aria-label="Menu">MENU</button>
             <ul class="nav-links" id="navLinks">
                 <li><a href="#agenda">Agenda</a></li>
                 <li><a href="#weer">Weer</a></li>
@@ -362,6 +358,31 @@
             </div>
         </div>
     </footer>
+
+    <!-- Chat Widget -->
+    <div class="chat-widget" id="chatWidget">
+        <div class="chat-header">
+            <div class="chat-header-info">
+                <span class="chat-header-icon">💬</span>
+                <span class="chat-header-title">Weekendweg Assistent</span>
+            </div>
+            <button class="chat-close" id="chatClose" aria-label="Sluit chat">&times;</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="chat-message chat-bot">
+                <p>Hoi! Stel me een vraag over het weekendweg-weekend in Wavre. 🏡</p>
+            </div>
+        </div>
+        <form class="chat-input-form" id="chatForm">
+            <input type="text" class="chat-input" id="chatInput" placeholder="Stel een vraag..." autocomplete="off">
+            <button type="submit" class="chat-send" id="chatSend" aria-label="Verstuur">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+        </form>
+    </div>
+    <button class="chat-fab" id="chatFab" aria-label="Open chat">
+        <span class="chat-fab-icon">💬</span>
+    </button>
 
     <script src="js/main.js"></script>
 </body>

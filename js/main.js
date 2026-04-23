@@ -184,4 +184,228 @@ document.addEventListener('DOMContentLoaded', () => {
 
     fetchWeather();
 
+    // --- Chat Widget (keyword-based, geen API key nodig) ---
+    const QA_DATA = [
+        {
+            keywords: ['adres', 'waar', 'locatie', 'villa', 'templiers', 'wavre', 'verblijf'],
+            answer: 'We verblijven in Villa des Templiers, Rue des Templiers 87, 1301 Wavre, België. Ongeveer 20 minuten rijden van Brussel. 🏡'
+        },
+        {
+            keywords: ['vertrek', 'hoe laat', 'wanneer weg', 'kerkwegje', 'vrijdag vertrek'],
+            answer: 'We vertrekken vrijdag 30 april om 10:15 vanaf het Kerkwegje. Zorg dat je op tijd klaarstaat! 🚗'
+        },
+        {
+            keywords: ['agenda', 'programma', 'planning', 'schema', 'wat doen'],
+            answer: '📋 <strong>Vrijdag:</strong> vertrek 10:15, lunch onderweg, boodschappen in Wavre, diner in Brussel, borrelen & stappen.<br><strong>Zaterdag:</strong> vrij programma overdag, BBQ 17:30, quiz 19:30, muzikale verrassing & cocktails 21:00.<br><strong>Zondag:</strong> ontbijt en terug naar huis.'
+        },
+        {
+            keywords: ['vrijdag', 'dag 1', 'eerste dag'],
+            answer: '🗓️ <strong>Vrijdag 30 april:</strong><br>10:15 Vertrekken (Kerkwegje)<br>12:45 Lunch onderweg<br>13:45 Naar supermarkt Wavre<br>14:15 Boodschappen (tot 15:00)<br>18:30 Richting Brussel<br>19:00 Diner (tot 22:00)<br>22:00 Borrelen — Deliriumstraat<br>Late night — Flash Club'
+        },
+        {
+            keywords: ['zaterdag', 'dag 2', 'hoofddag'],
+            answer: '🗓️ <strong>Zaterdag 1 mei:</strong><br>Overdag — Vrij programma, relaxen<br>17:30 BBQ (tot 19:30)<br>19:30 Quiz (tot 21:00)<br>21:00 Muzikale verrassing & cocktails 🎵 (tot 23:00)'
+        },
+        {
+            keywords: ['zondag', 'dag 3', 'laatste dag', 'terug', 'naar huis'],
+            answer: '🗓️ <strong>Zondag 2 mei:</strong><br>Ochtend — Ontbijt, rustig wakker worden<br>Daarna — Richting huis! Tot de volgende keer 👋'
+        },
+        {
+            keywords: ['bbq', 'barbecue', 'eten zaterdag', 'grillen'],
+            answer: 'De BBQ is zaterdag om 17:30. Vlees, vuur en goed gezelschap — tot 19:30! 🔥'
+        },
+        {
+            keywords: ['quiz'],
+            answer: 'De quiz is zaterdagavond van 19:30 tot 21:00. Laat zien wat je weet — en wat niet! 🧠'
+        },
+        {
+            keywords: ['muziek', 'verrassing', 'cocktail', 'muzikale'],
+            answer: 'Zaterdagavond om 21:00 is er een muzikale verrassing met cocktails. Stay tuned... 🎵🍹'
+        },
+        {
+            keywords: ['diner', 'eten vrijdag', 'restaurant', 'brussel eten'],
+            answer: 'Vrijdagavond dineren we in Brussel van 19:00 tot 22:00. Bon appétit! 🍽️'
+        },
+        {
+            keywords: ['stappen', 'flash', 'club', 'uitgaan', 'nacht'],
+            answer: 'Vrijdagnacht gaan we stappen in Flash Club in Brussel. De nacht is jong! 🪩'
+        },
+        {
+            keywords: ['delirium', 'borrel', 'drinken', 'café', 'bar'],
+            answer: 'Na het diner gaan we borrelen in de Deliriumstraat in Brussel. Proost! 🍻'
+        },
+        {
+            keywords: ['dresscode', 'kleding', 'ibiza', 'chique', 'aantrekken', 'outfit'],
+            answer: 'De dresscode voor zaterdagavond is <strong>Ibiza Chique</strong> — stijlvol maar relaxed, alsof je naar een beach club gaat. Linnen, lichte kleuren, zomerse vibes! 🌴'
+        },
+        {
+            keywords: ['meenemen', 'inpakken', 'wat neem', 'paklijst'],
+            answer: '🎒 <strong>Meenemen:</strong><br>• Persoonlijke spullen & zwemkleding<br>• Ibiza Chique outfit voor zaterdagavond<br><br><strong>Specifiek:</strong><br>• Emma: frisbee, versiering, zwembadaccessoires<br>• Julia: volleybal en beerpong<br>• Jerusha: Hitster'
+        },
+        {
+            keywords: ['opladen', 'auto', 'elektrisch', 'chauffeur', 'rijden'],
+            answer: 'Chauffeurs Hidde, Rutger en Emma: zorg dat de auto opgeladen is voor vertrek! 🔌'
+        },
+        {
+            keywords: ['zwembad', 'zwemmen', 'jacuzzi', 'pool'],
+            answer: 'De villa heeft een verwarmd jacuzzi (buiten) en een zwembad. Vergeet je zwemkleding niet! 🏊'
+        },
+        {
+            keywords: ['slaapkamer', 'bedden', 'slapen', 'kamers', 'badkamer'],
+            answer: 'De villa heeft 6 slaapkamers met 14 bedden en 4 badkamers. Plek genoeg voor iedereen! 🛏️'
+        },
+        {
+            keywords: ['parkeren', 'parkeer', 'auto stallen'],
+            answer: 'Ja, de villa heeft voldoende parkeergelegenheid op het terrein. 🅿️'
+        },
+        {
+            keywords: ['boodschappen', 'supermarkt', 'inkopen'],
+            answer: 'Vrijdagmiddag doen we boodschappen bij de supermarkt in Wavre, van 14:15 tot 15:00. 🛒'
+        },
+        {
+            keywords: ['fitness', 'gym', 'sporten'],
+            answer: 'De villa heeft een eigen fitnessruimte. Ga je gang! 💪'
+        },
+        {
+            keywords: ['airbnb', 'review', 'beoordeling', 'score'],
+            answer: 'De villa scoort een 4,85 uit 5 op Airbnb. Top beoordeeld! ⭐'
+        },
+        {
+            keywords: ['wanneer', 'datum', 'data', 'welke dag', 'weekend'],
+            answer: 'Het weekend is van vrijdag 30 april tot en met zondag 3 mei 2026. 📅'
+        },
+        {
+            keywords: ['hoi', 'hallo', 'hey', 'hi', 'yo'],
+            answer: 'Hey! 👋 Stel me een vraag over het weekend in Wavre — agenda, locatie, dresscode, noem maar op!'
+        },
+        {
+            keywords: ['emma'],
+            answer: 'Emma neemt mee: frisbee, versiering en zwembadaccessoires. En vergeet niet de auto op te laden! 🥏'
+        },
+        {
+            keywords: ['julia'],
+            answer: 'Julia neemt mee: volleybal en beerpong! 🏐'
+        },
+        {
+            keywords: ['jerusha'],
+            answer: 'Jerusha neemt Hitster mee! 🎵'
+        },
+        {
+            keywords: ['hidde'],
+            answer: 'Hidde is chauffeur — auto opladen voor vertrek! 🔌🚗'
+        },
+        {
+            keywords: ['rutger'],
+            answer: 'Rutger is chauffeur — auto opladen voor vertrek! En voor overige vragen kun je hem bellen 📞'
+        },
+        {
+            keywords: ['lunch', 'onderweg eten'],
+            answer: 'Vrijdag om 12:45 stoppen we onderweg voor een lunch. 🥪'
+        },
+        {
+            keywords: ['navigatie', 'route', 'hoe kom ik', 'google maps', 'maps', 'rijden naar'],
+            answer: 'De villa is op Rue des Templiers 87, 1301 Wavre. <a href="https://www.google.com/maps/dir//Rue+des+Templiers+87,+1301+Wavre/" target="_blank" style="color: #c9a96e;">Bekijk de route op Google Maps</a> 📍'
+        },
+        {
+            keywords: ['website', 'site', 'link', 'airbnb link', 'villa site'],
+            answer: '🔗 <a href="https://www.villadestempliers.com/" target="_blank" style="color: #c9a96e;">Villa website</a> · <a href="https://www.airbnb.com/h/villadestempliers" target="_blank" style="color: #c9a96e;">Airbnb pagina</a>'
+        },
+        {
+            keywords: ['tuin', 'buiten', 'privacy', 'terrein', 'groen', 'domein'],
+            answer: 'De villa heeft een grote tuin met totale privacy en een schitterend groen domein. Perfect om te relaxen! 🌿'
+        },
+        {
+            keywords: ['hoeveel', 'personen', 'plek', 'groep', 'groepsgrootte', 'capaciteit', 'wie', 'mensen'],
+            answer: 'De villa biedt plek voor 15 personen. 6 slaapkamers, 14 bedden, 4 badkamers. 👥'
+        },
+        {
+            keywords: ['weer', 'regen', 'zon', 'temperatuur', 'warm', 'koud', 'forecast'],
+            answer: 'Scroll naar de sectie "Weer in Wavre" op de site — daar staat een live weerbericht voor ons weekend (30 april – 3 mei). ☀️🌧️'
+        },
+        {
+            keywords: ['ontbijt', 'ochtend zondag'],
+            answer: 'Zondagochtend beginnen we rustig met een ontbijt in de villa. ☕🥐'
+        },
+        {
+            keywords: ['help', 'wat kan', 'wat weet', 'onderwerp', 'vraag'],
+            answer: 'Ik kan je helpen met: 📋 agenda (per dag), 📍 locatie & adres, 🏡 villa info (kamers, zwembad, jacuzzi, fitness, tuin), 👗 dresscode, 🎒 wat meenemen, 🚗 chauffeurs & parkeren, 🔗 links, ☀️ weer, en info over specifieke personen (Emma, Julia, Jerusha, Hidde, Rutger).'
+        },
+        {
+            keywords: ['bedankt', 'dankje', 'thanks', 'merci', 'top', 'dank'],
+            answer: 'Graag gedaan! Als je nog iets wilt weten, vraag maar. 😊'
+        },
+        {
+            keywords: ['brussel', 'brussels'],
+            answer: 'Vrijdagavond gaan we naar Brussel: diner om 19:00, borrelen in de Deliriumstraat om 22:00, en stappen in Flash Club. De villa ligt ~20 min van Brussel. 🌃'
+        }
+    ];
+
+    const FALLBACK = 'Dit is een vraag voor Rutger. Je kan hem hierover bellen. 📞';
+
+    function findAnswer(question) {
+        const q = question.toLowerCase()
+            .replace(/[?!.,;:'"]/g, '')
+            .replace(/\s+/g, ' ')
+            .trim();
+
+        let bestMatch = null;
+        let bestScore = 0;
+
+        for (const item of QA_DATA) {
+            let score = 0;
+            for (const kw of item.keywords) {
+                if (q.includes(kw.toLowerCase())) {
+                    score += kw.length; // langere matches wegen zwaarder
+                }
+            }
+            if (score > bestScore) {
+                bestScore = score;
+                bestMatch = item;
+            }
+        }
+
+        return bestScore > 0 ? bestMatch.answer : FALLBACK;
+    }
+
+    const chatWidget = document.getElementById('chatWidget');
+    const chatFab = document.getElementById('chatFab');
+    const chatClose = document.getElementById('chatClose');
+    const chatForm = document.getElementById('chatForm');
+    const chatInput = document.getElementById('chatInput');
+    const chatMessages = document.getElementById('chatMessages');
+
+    chatFab.addEventListener('click', () => {
+        chatWidget.classList.add('open');
+        chatFab.classList.add('hidden');
+        chatInput.focus();
+    });
+
+    chatClose.addEventListener('click', () => {
+        chatWidget.classList.remove('open');
+        chatFab.classList.remove('hidden');
+    });
+
+    function addMessage(text, role) {
+        const div = document.createElement('div');
+        div.className = `chat-message ${role === 'user' ? 'chat-user' : 'chat-bot'}`;
+        div.innerHTML = `<p>${text}</p>`;
+        chatMessages.appendChild(div);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    chatForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const question = chatInput.value.trim();
+        if (!question) return;
+
+        addMessage(question, 'user');
+        chatInput.value = '';
+
+        // Kort delay voor een "echt" gevoel
+        setTimeout(() => {
+            const answer = findAnswer(question);
+            addMessage(answer, 'bot');
+        }, 400);
+    });
+
 });
